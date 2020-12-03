@@ -49,10 +49,31 @@ const updateMusic = (req, res) => {
           })
     } 
 
+    const deleteMusic = (req, res) => {
+        const musicId = req.params.id
+        const musicFound = music.find(movie => movie.id == musicId) 
+        const musicIndex = music.indexOf(musicFound) 
+
+        if (musicIndex >= 0) { 
+            music.splice(musicIndex, 1) 
+        } else {
+            res.status(404).send('erro aqui')
+        }
+
+        fs.writeFile("./src/model/music.json", JSON.stringify(music), 'utf8', function (err) { 
+            if (err) {
+                res.status(500).send('eita, ve o que rolou')
+            } else {
+                res.sendStatus(204)
+            }
+        })
+
+    }
 
 module.exports = {
     getAll,
     getById,
     create,
-    updateMusic
+    updateMusic,
+    deleteMusic
 }
