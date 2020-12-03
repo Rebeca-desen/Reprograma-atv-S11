@@ -27,8 +27,32 @@ const create = (req, res) => {
 })
 }
 
+const updateMusic = (req, res) => {
+    
+        const musicId= req.params.id
+        const musicToUpdate = req.body 
+      
+        const musicFound = music.find(musica => musica.id == musicId)       
+        const musicIndex = music.indexOf(musicFound) 
+
+        if (musicIndex >= 0) { 
+            music.splice(musicIndex, 1, musicToUpdate) 
+        } else {
+            res.status(404).send( "musica não achada" )
+        }
+        
+        fs.writeFile('./src/model/music.json', JSON.stringify(music), 'utf8', function (err){
+            if(err){
+              return res.status(500).send('vixi kk')
+            }
+            return res.status(200).send('atualização')
+          })
+    } 
+
+
 module.exports = {
     getAll,
     getById,
-    create
+    create,
+    updateMusic
 }
